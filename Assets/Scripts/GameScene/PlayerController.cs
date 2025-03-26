@@ -21,8 +21,7 @@ public class PlayerController : MonoBehaviour{
 
     void Update()
     {
-
-        bool isStuck = controller.velocity.magnitude <= 1.3f && controller.isGrounded;
+        bool isStuck = controller.velocity.magnitude <= 1.3f && controller.isGrounded && Vector3.Angle (Vector3.up, hitNormal) <= 60;
         bool isGrounded = Vector3.Angle (Vector3.up, hitNormal) <= controller.slopeLimit;
 
         transform.Rotate(0, Input.GetAxis("Mouse X") * turnSpeed * Time.deltaTime, 0);
@@ -30,8 +29,8 @@ public class PlayerController : MonoBehaviour{
             vel = transform.forward * Input.GetAxis("Vertical") * speed;
             vel += transform.right * Input.GetAxis("Horizontal") * speed;
         }else{
-            vel += transform.forward * Input.GetAxis("Vertical") * speed * 0.5f * Time.deltaTime;
-            vel += transform.right * Input.GetAxis("Horizontal") * speed * 0.5f * Time.deltaTime;
+            vel += transform.forward * Input.GetAxis("Vertical") * speed * 0.75f * Time.deltaTime;
+            vel += transform.right * Input.GetAxis("Horizontal") * speed * 0.75f * Time.deltaTime;
             if(controller.isGrounded){
                 vel.x += (1f - hitNormal.y) * hitNormal.x * (1f - slideFriction);
                 vel.z += (1f - hitNormal.y) * hitNormal.z * (1f - slideFriction);
@@ -42,6 +41,8 @@ public class PlayerController : MonoBehaviour{
                 verticalSpeed = jumpStrength;
                 if(isStuck){
                     vel = Vector3.zero;
+                }else{
+                    vel *= 0.70f;
                 }
                 hitNormal = Vector3.down;
             }
