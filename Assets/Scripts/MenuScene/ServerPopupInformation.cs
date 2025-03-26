@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ServerPopupInformation : MonoBehaviour
 {
@@ -10,5 +11,11 @@ public class ServerPopupInformation : MonoBehaviour
         // transform.Find("ServerMap").GetComponent<TMPro.TextMeshProUGUI>().text = serverMap;
         // transform.Find("ServerPlayers").GetComponent<TMPro.TextMeshProUGUI>().text = currentPlayers + "/" + maxPlayers;
         // transform.Find("ServerWipeAgo").GetComponent<TMPro.TextMeshProUGUI>().text = wipeAgo;
+    }
+
+
+    public void JoinServer()
+    {
+        SceneManager.LoadScene("GameScene");
     }
 }
