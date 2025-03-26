@@ -18,6 +18,8 @@ public class ServerItem : MonoBehaviour
     public TextMeshProUGUI serverPlayersText;
     public TextMeshProUGUI serverPingText;
 
+    public GameObject popupInformationObj;
+
     public void AddServer(string serverName, string serverIP, string map, int currentPlayers, int maxPlayers, string wipeAgo)
     {
         this.serverName = serverName;
@@ -30,5 +32,11 @@ public class ServerItem : MonoBehaviour
         serverNameText.text = serverName;
         serverDescriptionText.text = map + " / " + wipeAgo;
         serverPlayersText.text = currentPlayers + "/" + maxPlayers;
+    }
+
+    public void ShowInformationOnPopup()
+    {
+        popupInformationObj.SetActive(true);
+        popupInformationObj.GetComponent<ServerPopupInformation>().SetInformation(serverName, ip, map, currentPlayers, maxPlayers, wipeAgo);
     }
 }

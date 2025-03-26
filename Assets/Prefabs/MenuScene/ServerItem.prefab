@@ -658,11 +658,11 @@ RectTransform:
   - {fileID: 7951531539267980583}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.9}
-  m_AnchorMax: {x: 1, y: 0.9}
-  m_AnchoredPosition: {x: 0, y: 5.5}
-  m_SizeDelta: {x: 0, y: 75}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 85}
+  m_Pivot: {x: 1, y: 1}
 --- !u!222 &3403418479242207059
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -744,7 +744,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5318051427016433983}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7129890634519234827}
+        m_TargetAssemblyTypeName: ServerItem, Assembly-CSharp
+        m_MethodName: ShowInformationOnPopup
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &7129890634519234827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -761,3 +773,4 @@ MonoBehaviour:
   serverDescriptionText: {fileID: 448237941964579894}
   serverPlayersText: {fileID: 1956139214466148552}
   serverPingText: {fileID: 8959556144933324951}
+  popupInformationObj: {fileID: 0}
