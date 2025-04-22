@@ -8,6 +8,8 @@ public class GameController : MonoBehaviour
 
     private List<GameBehaviour> behaviours = new List<GameBehaviour>();
     private MouseBehaviour mouseBehaviour;
+    private GameMenuBehaviour menuBehaviour;
+    private CraftMenuBehaviour craftMenuBehaviour;
 
     void Awake()
     {
@@ -21,7 +23,15 @@ public class GameController : MonoBehaviour
 
         // Initialize behaviours
         mouseBehaviour = new MouseBehaviour();
+        menuBehaviour = new GameMenuBehaviour(mouseBehaviour);
+        craftMenuBehaviour = new CraftMenuBehaviour(mouseBehaviour, menuBehaviour);
+        
+        // Set up cross-references
+        menuBehaviour.SetCraftMenuBehaviour(craftMenuBehaviour);
+        
         behaviours.Add(mouseBehaviour);
+        behaviours.Add(menuBehaviour);
+        behaviours.Add(craftMenuBehaviour);
     }
 
     void Start()

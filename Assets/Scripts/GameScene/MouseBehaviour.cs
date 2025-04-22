@@ -10,23 +10,6 @@ public class MouseBehaviour : GameBehaviour
         LockMouse();
     }
 
-    public override void Update()
-    {
-        HandleMouseLock();
-    }
-
-    private void HandleMouseLock()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab))
-        {
-            UnlockMouse();
-        }
-        else if (Input.GetMouseButtonDown(0) && !isMouseLocked)
-        {
-            LockMouse();
-        }
-    }
-
     public void LockMouse()
     {
         isMouseLocked = true;
