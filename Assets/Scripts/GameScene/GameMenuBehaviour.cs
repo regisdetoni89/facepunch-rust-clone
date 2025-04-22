@@ -9,6 +9,12 @@ public class GameMenuBehaviour : GameBehaviour
     private MouseBehaviour mouseBehaviour;
     private CraftMenuBehaviour craftMenuBehaviour;
 
+    // Screen size relative values
+    private const float BUTTON_WIDTH_PERCENT = 0.05f; // 5% of screen width
+    private const float BUTTON_HEIGHT_PERCENT = 0.02f; // 2% of screen height
+    private const float BUTTON_SPACING_PERCENT = 0.01f; // 1% of screen height
+    private const float MARGIN_PERCENT = 0.01f; // 1% margin from edges
+
     public GameMenuBehaviour(MouseBehaviour mouseBehaviour)
     {
         this.mouseBehaviour = mouseBehaviour;
@@ -47,7 +53,10 @@ public class GameMenuBehaviour : GameBehaviour
         GameObject canvasObj = new GameObject("MenuCanvas");
         Canvas canvas = canvasObj.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvasObj.AddComponent<CanvasScaler>();
+        CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920, 1080);
+        scaler.matchWidthOrHeight = 0.5f; // Balance between width and height scaling
         canvasObj.AddComponent<GraphicRaycaster>();
 
         // Create full screen background panel
@@ -70,12 +79,22 @@ public class GameMenuBehaviour : GameBehaviour
         containerRect.anchorMin = new Vector2(0, 0);
         containerRect.anchorMax = new Vector2(0, 0);
         containerRect.pivot = new Vector2(0, 0);
-        containerRect.anchoredPosition = new Vector2(50, 50);
-        containerRect.sizeDelta = new Vector2(200, 120); // Width of buttons + spacing
+        
+        // Calculate button sizes based on screen resolution
+        float screenWidth = Screen.width;
+        float screenHeight = Screen.height;
+        float buttonWidth = screenWidth * BUTTON_WIDTH_PERCENT;
+        float buttonHeight = screenHeight * BUTTON_HEIGHT_PERCENT;
+        float buttonSpacing = screenHeight * BUTTON_SPACING_PERCENT;
+        float margin = screenWidth * MARGIN_PERCENT;
+
+        // Position container with margin
+        containerRect.anchoredPosition = new Vector2(margin, margin);
+        containerRect.sizeDelta = new Vector2(buttonWidth, buttonHeight * 2 + buttonSpacing);
 
         // Create Resume Button
-        CreateButton("Resume", new Vector2(0, 70), () => ToggleMenu());
-        CreateButton("Quit", new Vector2(0, 0), () => {
+        CreateButton("Resume", new Vector2(0, buttonHeight + buttonSpacing), buttonWidth, buttonHeight, () => ToggleMenu());
+        CreateButton("Quit", new Vector2(0, 0), buttonWidth, buttonHeight, () => {
             #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
             #endif
@@ -83,7 +102,7 @@ public class GameMenuBehaviour : GameBehaviour
         });
     }
 
-    private void CreateButton(string text, Vector2 position, UnityEngine.Events.UnityAction onClick)
+    private void CreateButton(string text, Vector2 position, float width, float height, UnityEngine.Events.UnityAction onClick)
     {
         GameObject buttonObj = new GameObject(text + "Button");
         buttonObj.transform.SetParent(buttonContainer.transform, false);
@@ -99,7 +118,7 @@ public class GameMenuBehaviour : GameBehaviour
 
         // Set Button Position and Size
         RectTransform buttonRect = buttonObj.GetComponent<RectTransform>();
-        buttonRect.sizeDelta = new Vector2(200, 50);
+        buttonRect.sizeDelta = new Vector2(width, height);
         buttonRect.anchoredPosition = position;
 
         // Add Text
@@ -110,19 +129,20 @@ public class GameMenuBehaviour : GameBehaviour
         buttonText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         buttonText.alignment = TextAnchor.MiddleLeft;
         buttonText.color = Color.white;
-        buttonText.fontSize = 24;
+        buttonText.fontSize = Mathf.RoundToInt(height * 0.4f); // Font size relative to button height
 
-        // Center text
+        // Position text with padding
         RectTransform textRect = textObj.GetComponent<RectTransform>();
-        textRect.anchorMin = Vector2.zero;
-        textRect.anchorMax = Vector2.one;
-        textRect.offsetMin = Vector2.zero;
+        textRect.anchorMin = new Vector2(0, 0);
+        textRect.anchorMax = new Vector2(1, 1);
+        textRect.offsetMin = new Vector2(height * 0.2f, 0); // Left padding relative to button height
         textRect.offsetMax = Vector2.zero;
     }
 
     private void ToggleMenu()
     {
         isMenuVisible = !isMenuVisible;
+        menuPanel.SetActive(isMenuVisible);
 
         if (isMenuVisible){
             ShowMenu();
