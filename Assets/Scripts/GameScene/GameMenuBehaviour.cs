@@ -10,10 +10,13 @@ public class GameMenuBehaviour : GameBehaviour
     private CraftMenuBehaviour craftMenuBehaviour;
 
     // Screen size relative values
-    private const float BUTTON_WIDTH_PERCENT = 0.05f; // 5% of screen width
-    private const float BUTTON_HEIGHT_PERCENT = 0.02f; // 2% of screen height
+    private const float BUTTON_WIDTH_PERCENT = 0.1f; // 10% of screen width
+    private const float BUTTON_HEIGHT_PERCENT = 0.05f; // 5% of screen height
     private const float BUTTON_SPACING_PERCENT = 0.01f; // 1% of screen height
     private const float MARGIN_PERCENT = 0.01f; // 1% margin from edges
+
+    private const int SCREEN_WIDTH = 1920;
+    private const int SCREEN_HEIGHT = 1080;
 
     public GameMenuBehaviour(MouseBehaviour mouseBehaviour)
     {
@@ -55,7 +58,7 @@ public class GameMenuBehaviour : GameBehaviour
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920, 1080);
+        scaler.referenceResolution = new Vector2(SCREEN_WIDTH, SCREEN_HEIGHT);
         scaler.matchWidthOrHeight = 0.5f; // Balance between width and height scaling
         canvasObj.AddComponent<GraphicRaycaster>();
 
@@ -81,8 +84,8 @@ public class GameMenuBehaviour : GameBehaviour
         containerRect.pivot = new Vector2(0, 0);
         
         // Calculate button sizes based on screen resolution
-        float screenWidth = Screen.width;
-        float screenHeight = Screen.height;
+        float screenWidth = SCREEN_WIDTH;
+        float screenHeight = SCREEN_HEIGHT;
         float buttonWidth = screenWidth * BUTTON_WIDTH_PERCENT;
         float buttonHeight = screenHeight * BUTTON_HEIGHT_PERCENT;
         float buttonSpacing = screenHeight * BUTTON_SPACING_PERCENT;
