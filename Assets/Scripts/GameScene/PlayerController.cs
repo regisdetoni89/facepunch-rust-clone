@@ -13,12 +13,6 @@ public class PlayerController : MonoBehaviour{
     private Vector3 hitNormal = Vector3.down;
 
     private Vector3 vel = Vector3.zero;
-    private bool isMouseLocked = false;
-
-    void Start()
-    {
-        LockMouse();
-    }
 
     void OnControllerColliderHit (ControllerColliderHit hit) {
 	    hitNormal = hit.normal;
@@ -27,29 +21,7 @@ public class PlayerController : MonoBehaviour{
 
     void Update()
     {
-        HandleMouseLock();
         MovePlayerBasedOnInput();
-    }
-
-    void HandleMouseLock()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Tab))
-        {
-            isMouseLocked = false;
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else if (Input.GetMouseButtonDown(0) && !isMouseLocked)
-        {
-            LockMouse();
-        }
-    }
-
-    void LockMouse()
-    {
-        isMouseLocked = true;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     void MovePlayerBasedOnInput()
@@ -57,7 +29,7 @@ public class PlayerController : MonoBehaviour{
         bool isStuck = controller.velocity.magnitude <= 1.3f && controller.isGrounded && Vector3.Angle (Vector3.up, hitNormal) <= 60;
         bool isGrounded = Vector3.Angle (Vector3.up, hitNormal) <= controller.slopeLimit;
 
-        if (isMouseLocked)
+        if (GameController.Instance.IsMouseLocked)
         {
             transform.Rotate(0, Input.GetAxis("Mouse X") * turnSpeed * Time.deltaTime, 0);
         }
@@ -86,8 +58,6 @@ public class PlayerController : MonoBehaviour{
 
         verticalSpeed -= 9.8f * Time.deltaTime;
         vel.y = verticalSpeed;
-
-
 
         controller.Move(vel * Time.deltaTime);
     }
